@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\sample-chat-frontend"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\sequlizeMysql"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "node_modules/typescript/lib"
+	}
+}
