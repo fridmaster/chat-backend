@@ -10,26 +10,27 @@ export class Message extends Model {
 }
 
 Message.init(
-    {
-      id: {
-        type: new DataTypes.STRING(128),
-        primaryKey: true
-      },
-      userId: {
-        type: new DataTypes.STRING(128),
-        allowNull: false
-      },
-      text: {
-        type: new DataTypes.STRING(128),
-        allowNull: false
-      },
-      userName: {
-        type: new DataTypes.STRING(128),
-        allowNull: false
-      }
+  {
+    id: {
+      type: new DataTypes.STRING(128),
+      primaryKey: true
     },
-    {
-      tableName: "messages",
-      sequelize: sequelize // this bit is important
+    userId: {
+      type: new DataTypes.STRING(128),
+      allowNull: false
+    },
+    text: {
+      type: new DataTypes.STRING(128),
+      allowNull: false
+    },
+    userName: {
+      type: new DataTypes.STRING(128),
+      allowNull: false
     }
-  );
+  },
+  {
+    tableName: "messages",
+    sequelize: sequelize // this bit is important
+  }
+
+);

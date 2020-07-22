@@ -1,10 +1,10 @@
 import * as express from 'express';
 import * as socketIo from 'socket.io';
 import { createServer, Server } from 'http';
-import {sequelize} from './dbConnection';
+import { sequelize } from './dbConnection';
 import * as cors from "cors";
 import { Message } from './message.model';
-import { MessageController} from './message.controller';
+import { MessageController } from './message.controller';
 
 export enum ChatEvent {
   MESSAGE = 'message',
@@ -16,15 +16,15 @@ type SocketDefaultError = string;
 type SocketResponse<
   Res = SocketDefaultResult,
   Err = SocketDefaultError
-> = {
-  res?: Res;
-  err?: Err;
-};
+  > = {
+    res?: Res;
+    err?: Err;
+  };
 
 type SocketCallback<
   Res = SocketDefaultResult,
   Err = SocketDefaultError
-> = (res: SocketResponse<Res, Err>) => void;
+  > = (res: SocketResponse<Res, Err>) => void;
 
 
 interface ChatMessageIncoming {
@@ -49,8 +49,8 @@ export class ChatServer {
   private server: Server;
   private io: SocketIO.Server;
   private port: string | number;
-  private messageController:MessageController = new MessageController();
-  constructor () {
+  private messageController: MessageController = new MessageController();
+  constructor() {
     this._app = express();
     this.port = process.env.PORT || ChatServer.PORT;
     this._app.use(cors());
@@ -58,34 +58,34 @@ export class ChatServer {
     this.server = createServer(this._app);
     this.initSocket();
     this.listen();
-      sequelize
-    .authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-      this.createModels();
-    })
-    .catch(err => {
-      console.error('Unable to connect to the database:', err);
-    });    
+    sequelize
+      .authenticate()
+      .then(() => {
+        console.log('Connection has been established successfully.');
+        this.createModels();
+      })
+      .catch(err => {
+        console.error('Unable to connect to the database:', err);
+      });
   }
 
-  private createModels(){
+  private createModels() {
     Message.sync({ force: true }).then(console.log);
-  
+
   }
 
-  private initSocket (): void {
+  private initSocket(): void {
     this.io = socketIo(this.server, { path: '/chat' });
   }
 
-  private listen (): void {
+  private listen(): void {
     this.server.listen(this.port, () => {
       console.log('Running server on port %s', this.port);
     });
-    
+
     this.io.on("connect", (socket: socketIo.Socket) => {
       console.log('Connected client on port %s.', this.port);
-      socket.on("*",(mes)=>{
+      socket.on("*", (mes) => {
         console.log(mes)
       })
       socket.on(ChatEvent.MESSAGE, (m: ChatMessageIncoming) => {
@@ -95,28 +95,28 @@ export class ChatServer {
           createdAt: new Date(),
           status: "receivedByServer"
         }
-       return this.messageController.saveMessage(savedMessage).then(()=>{
+        return this.messageController.saveMessage(savedMessage).then(() => {
 
 
           this.io.emit('message', savedMessage);
         })
-     
+
       });
 
       socket.on(ChatEvent.LIST_MESSAGES, (cb: SocketCallback<ListMessagesResponse>) => {
         console.log(cb)
-        return this.messageController.getMessageList().then((result)=>{
-          let listOfMessage = result.map((message:any) => {
-           return message.dataValues
+        return this.messageController.getMessageList().then((result) => {
+          let listOfMessage = result.map((message: any) => {
+            return message.dataValues
           })
-         
+
           cb({
             res: {
               items: listOfMessage.slice().reverse()
             }
           })
         })
-      
+
       });
 
       socket.on("disconnected", () => {
@@ -125,7 +125,7 @@ export class ChatServer {
     });
   }
 
-  get app (): express.Application {
+  get app(): express.Application {
     return this._app;
   }
 }
