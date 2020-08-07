@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-export const sequelize = new Sequelize('mysql://sql7355529:neMW5Mwgjr@sql7.freemysqlhosting.net:3306/sql7355529', {
+export const sequelize = new Sequelize('ADD_YOUR_CONNECTION', {
     define: {
         charset: 'utf8',
         collate: 'utf8_general_ci',
