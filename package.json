@@ -29,7 +29,7 @@
     "@types/bluebird": "^3.5.32",
     "@types/validator": "^13.1.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "mysql2": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.3.3",
